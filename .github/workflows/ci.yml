@@ -15,7 +15,7 @@ env:
   API_PROJECT: "./TODO API/TODO API.csproj"
   TEST_PROJECT: "./TodoApi.Tests/TodoApi.Tests.csproj"
   ARTIFACT_NAME: todoapi-drop
-  AZURE_WEBAPP_NAME: todoapi-tj  # ← change this to your actual App Service name
+  AZURE_WEBAPP_NAME: freeToDoApp
 
 jobs:
   build_test_publish:
