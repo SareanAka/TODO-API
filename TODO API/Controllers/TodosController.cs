@@ -18,19 +18,19 @@ public class TodosController : ControllerBase
     }
 
     [HttpGet]
-    public ActionResult<IReadOnlyList<TodoItem>> GetAll()
+    public async Task<ActionResult<IReadOnlyList<TodoItem>>> GetAll()
     {
         _logger.LogInformation("Retrieving all todo items");
-        var todos = _todoService.GetAll();
+        var todos = await _todoService.GetAllAsync();
         _logger.LogInformation("Retrieved {Count} todo items", todos.Count);
         return Ok(todos);
     }
 
     [HttpGet("{id}")]
-    public ActionResult<TodoItem> GetById(int id)
+    public async Task<ActionResult<TodoItem>> GetById(int id)
     {
         _logger.LogInformation("Retrieving todo item with id {Id}", id);
-        var item = _todoService.GetById(id);
+        var item = await _todoService.GetByIdAsync(id);
 
         if (item is null)
         {
@@ -42,7 +42,7 @@ public class TodosController : ControllerBase
     }
 
     [HttpPost]
-    public ActionResult<TodoItem> Create([FromBody] CreateTodoRequest request)
+    public async Task<ActionResult<TodoItem>> Create([FromBody] CreateTodoRequest request)
     {
         if (string.IsNullOrWhiteSpace(request.Title))
         {
@@ -51,17 +51,17 @@ public class TodosController : ControllerBase
         }
 
         _logger.LogInformation("Creating todo item with title '{Title}'", request.Title);
-        var item = _todoService.Create(request.Title, request.DueDateTime);
+        var item = await _todoService.CreateAsync(request.Title, request.DueDateTime);
         _logger.LogInformation("Created todo item with id {Id}", item.Id);
 
         return CreatedAtAction(nameof(GetById), new { id = item.Id }, item);
     }
 
     [HttpDelete("{id}")]
-    public IActionResult Delete(int id)
+    public async Task<IActionResult> Delete(int id)
     {
         _logger.LogInformation("Deleting todo item with id {Id}", id);
-        var deleted = _todoService.Delete(id);
+        var deleted = await _todoService.DeleteAsync(id);
 
         if (!deleted)
         {
@@ -74,7 +74,7 @@ public class TodosController : ControllerBase
     }
 
     [HttpPatch("{id}")]
-    public ActionResult<TodoItem> Update(int id, [FromBody] UpdateTodoRequest request)
+    public async Task<ActionResult<TodoItem>> Update(int id, [FromBody] UpdateTodoRequest request)
     {
         if (request.Title is null && request.IsCompleted is null && request.DueDateTime is null)
         {
@@ -83,7 +83,7 @@ public class TodosController : ControllerBase
         }
 
         _logger.LogInformation("Updating todo item with id {Id}", id);
-        var item = _todoService.Update(id, request.Title, request.IsCompleted, request.DueDateTime);
+        var item = await _todoService.UpdateAsync(id, request.Title, request.IsCompleted, request.DueDateTime);
 
         if (item is null)
         {

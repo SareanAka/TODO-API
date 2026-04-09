@@ -15,6 +15,7 @@ env:
   API_PROJECT: "./TODO API/TODO API.csproj"
   TEST_PROJECT: "./TodoApi.Tests/TodoApi.Tests.csproj"
   ARTIFACT_NAME: todoapi-drop
+  AZURE_WEBAPP_NAME: todoapi-tj  # ← change this to your actual App Service name
 
 jobs:
   build_test_publish:
@@ -75,3 +76,23 @@ jobs:
             **/TestResults/**/coverage.cobertura.xml
           if-no-files-found: warn
           retention-days: 7
+
+  deploy:
+    name: Deploy to Azure App Service
+    needs: build_test_publish
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ env.ARTIFACT_NAME }}
+          path: ./publish
+
+      - name: Deploy to Azure Web App
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: ${{ env.AZURE_WEBAPP_NAME }}
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          package: ./publish

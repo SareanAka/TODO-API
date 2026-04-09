@@ -1,6 +1,32 @@
 @TODO_API_HostAddress = http://localhost:5062
 
-GET {{TODO_API_HostAddress}}/weatherforecast/
+### Get all todos
+GET {{TODO_API_HostAddress}}/todos
 Accept: application/json
 
-###
+### Get todo by id
+GET {{TODO_API_HostAddress}}/todos/1
+Accept: application/json
+
+### Create a todo
+POST {{TODO_API_HostAddress}}/todos
+Content-Type: application/json
+
+{
+  "title": "Sample task",
+  "dueDateTime": "2025-12-31T12:00:00"
+}
+
+### Update a todo
+PATCH {{TODO_API_HostAddress}}/todos/1
+Content-Type: application/json
+
+{
+  "isCompleted": true
+}
+
+### Delete a todo
+DELETE {{TODO_API_HostAddress}}/todos/1
+
+### Health check
+GET {{TODO_API_HostAddress}}/health

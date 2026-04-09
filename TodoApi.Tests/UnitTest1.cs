@@ -33,18 +33,18 @@ public class TodoServiceTests : IDisposable
     }
 
     [Fact]
-    public void GetAll_ReturnsEmptyList_WhenNoTodosExist()
+    public async Task GetAll_ReturnsEmptyList_WhenNoTodosExist()
     {
-        var result = _service.GetAll();
+        var result = await _service.GetAllAsync();
 
         Assert.Empty(result);
     }
 
     [Fact]
-    public void Create_AddsTodoAndReturnsIt()
+    public async Task Create_AddsTodoAndReturnsIt()
     {
         var due = new DateTime(new DateOnly(2025, 03, 12), new TimeOnly(12, 00, 00));
-        var item = _service.Create("Meeting", due);
+        var item = await _service.CreateAsync("Meeting", due);
 
         Assert.Equal(1, item.Id);
         Assert.Equal("Meeting", item.Title);
@@ -53,60 +53,60 @@ public class TodoServiceTests : IDisposable
     }
 
     [Fact]
-    public void GetAll_ReturnsAllCreatedTodos()
+    public async Task GetAll_ReturnsAllCreatedTodos()
     {
-        _service.Create("Task 1", null);
-        _service.Create("Task 2", null);
+        await _service.CreateAsync("Task 1", null);
+        await _service.CreateAsync("Task 2", null);
 
-        var result = _service.GetAll();
+        var result = await _service.GetAllAsync();
 
         Assert.Equal(2, result.Count);
     }
 
     [Fact]
-    public void GetById_ReturnsTodo_WhenExists()
+    public async Task GetById_ReturnsTodo_WhenExists()
     {
-        var created = _service.Create("Test", null);
+        var created = await _service.CreateAsync("Test", null);
 
-        var result = _service.GetById(created.Id);
+        var result = await _service.GetByIdAsync(created.Id);
 
         Assert.NotNull(result);
         Assert.Equal("Test", result.Title);
     }
 
     [Fact]
-    public void GetById_ReturnsNull_WhenNotExists()
+    public async Task GetById_ReturnsNull_WhenNotExists()
     {
-        var result = _service.GetById(999);
+        var result = await _service.GetByIdAsync(999);
 
         Assert.Null(result);
     }
 
     [Fact]
-    public void Delete_ReturnsTrue_WhenTodoExists()
+    public async Task Delete_ReturnsTrue_WhenTodoExists()
     {
-        var created = _service.Create("To delete", null);
+        var created = await _service.CreateAsync("To delete", null);
 
-        var result = _service.Delete(created.Id);
+        var result = await _service.DeleteAsync(created.Id);
 
         Assert.True(result);
-        Assert.Empty(_service.GetAll());
+        Assert.Empty(await _service.GetAllAsync());
     }
 
     [Fact]
-    public void Delete_ReturnsFalse_WhenTodoNotExists()
+    public async Task Delete_ReturnsFalse_WhenTodoNotExists()
     {
-        var result = _service.Delete(999);
+        var result = await _service.DeleteAsync(999);
 
         Assert.False(result);
     }
 
     [Fact]
-    public void Update_ReturnsUpdatedTodo_WhenExists()
+    public async Task Update_ReturnsUpdatedTodo_WhenExists()
     {
-        var created = _service.Create("Original", null);
+        var created = await _service.CreateAsync("Original", null);
 
-        var result = _service.Update(created.Id, "Updated", true, null);
+        var result = await _service.UpdateAsync(created.Id, "Updated", true, null);
 
         Assert.NotNull(result);
         Assert.Equal("Updated", result.Title);
@@ -114,19 +114,19 @@ public class TodoServiceTests : IDisposable
     }
 
     [Fact]
-    public void Update_ReturnsNull_WhenNotExists()
+    public async Task Update_ReturnsNull_WhenNotExists()
     {
-        var result = _service.Update(999, "Nope", null, null);
+        var result = await _service.UpdateAsync(999, "Nope", null, null);
 
         Assert.Null(result);
     }
 
     [Fact]
-    public void Update_OnlyUpdatesProvidedFields()
+    public async Task Update_OnlyUpdatesProvidedFields()
     {
-        var created = _service.Create("Original", null);
+        var created = await _service.CreateAsync("Original", null);
 
-        var result = _service.Update(created.Id, null, true, null);
+        var result = await _service.UpdateAsync(created.Id, null, true, null);
 
         Assert.NotNull(result);
         Assert.Equal("Original", result.Title);
@@ -134,10 +134,10 @@ public class TodoServiceTests : IDisposable
     }
 
     [Fact]
-    public void Create_AssignsIncrementingIds()
+    public async Task Create_AssignsIncrementingIds()
     {
-        var first = _service.Create("First", null);
-        var second = _service.Create("Second", null);
+        var first = await _service.CreateAsync("First", null);
+        var second = await _service.CreateAsync("Second", null);
 
         Assert.Equal(1, first.Id);
         Assert.Equal(2, second.Id);
