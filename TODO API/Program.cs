@@ -2,7 +2,7 @@ using TODO_API.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddSingleton<ITodoService, TodoService>();
+builder.Services.AddScoped<ITodoService, TodoService>();
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 

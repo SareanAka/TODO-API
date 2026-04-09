@@ -76,7 +76,7 @@ public class TodosController : ControllerBase
     [HttpPatch("{id}")]
     public ActionResult<TodoItem> Update(int id, [FromBody] UpdateTodoRequest request)
     {
-        if (request.Title is null && request.IsCompleted is null)
+        if (request.Title is null && request.IsCompleted is null && request.DueDateTime is null)
         {
             _logger.LogWarning("Update todo failed: no fields provided for id {Id}", id);
             return BadRequest(new { error = "At least one field (title or isCompleted) must be provided." });
