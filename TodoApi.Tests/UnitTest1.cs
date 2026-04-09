@@ -1,10 +1,36 @@
-﻿using TODO_API.Services;
+﻿using Microsoft.Data.Sqlite;
+using Microsoft.EntityFrameworkCore;
+using TODO_API.Data;
+using TODO_API.Services;
 
 namespace TodoApi.Tests;
 
-public class TodoServiceTests
+public class TodoServiceTests : IDisposable
 {
-    private readonly TodoService _service = new();
+    private readonly SqliteConnection _connection;
+    private readonly TodoDbContext _db;
+    private readonly TodoService _service;
+
+    public TodoServiceTests()
+    {
+        _connection = new SqliteConnection("Data Source=:memory:");
+        _connection.Open();
+
+        var options = new DbContextOptionsBuilder<TodoDbContext>()
+            .UseSqlite(_connection)
+            .Options;
+
+        _db = new TodoDbContext(options);
+        _db.Database.EnsureCreated();
+
+        _service = new TodoService(_db);
+    }
+
+    public void Dispose()
+    {
+        _db.Dispose();
+        _connection.Dispose();
+    }
 
     [Fact]
     public void GetAll_ReturnsEmptyList_WhenNoTodosExist()
@@ -17,12 +43,13 @@ public class TodoServiceTests
     [Fact]
     public void Create_AddsTodoAndReturnsIt()
     {
-        var item = _service.Create("Meeting", new DateTime(new DateOnly(2025, 03, 12), new TimeOnly(12, 00, 00)));
+        var due = new DateTime(new DateOnly(2025, 03, 12), new TimeOnly(12, 00, 00));
+        var item = _service.Create("Meeting", due);
 
         Assert.Equal(1, item.Id);
         Assert.Equal("Meeting", item.Title);
         Assert.False(item.IsCompleted);
-        Assert.Equal(new DateTime(new DateOnly(2025, 03, 12), new TimeOnly(12, 00, 00)), item.DueDateTime);
+        Assert.Equal(due, item.DueDateTime);
     }
 
     [Fact]
