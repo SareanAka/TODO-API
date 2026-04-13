@@ -1,7 +1,11 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace TODO_API.Models;
 
 public class CreateTodoRequest
 {
-    public string? Title { get; set; }
+    [Required]
+    [StringLength(200, MinimumLength = 1)]
+    public string Title { get; set; } = string.Empty;
     public DateTime? DueDateTime { get; set; }
 }

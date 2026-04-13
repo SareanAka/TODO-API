@@ -44,12 +44,6 @@ public class TodosController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<TodoItem>> Create([FromBody] CreateTodoRequest request)
     {
-        if (string.IsNullOrWhiteSpace(request.Title))
-        {
-            _logger.LogWarning("Create todo failed: title is required");
-            return BadRequest(new { error = "Title is required." });
-        }
-
         _logger.LogInformation("Creating todo item with title '{Title}'", request.Title);
         var item = await _todoService.CreateAsync(request.Title, request.DueDateTime);
         _logger.LogInformation("Created todo item with id {Id}", item.Id);
