@@ -8,9 +8,9 @@
         @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
 
         :root {
-            --green:      #33ff33;
-            --dim-green:  #00aa00;
-            --bg:         #0a0a0a;
+            --green:      #d4a843;
+            --dim-green:  #8a6420;
+            --bg:         #14120a;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -19,7 +19,7 @@
             background: var(--bg);
             color: var(--green);
             font-family: 'Share Tech Mono', 'Courier New', monospace;
-            font-size: 16px;
+            font-size: 18px;
             min-height: 100vh;
             padding: 24px 16px;
         }
@@ -33,8 +33,8 @@
                 0deg,
                 transparent,
                 transparent 2px,
-                rgba(0,0,0,0.18) 2px,
-                rgba(0,0,0,0.18) 4px
+                rgba(0,0,0,0.10) 2px,
+                rgba(0,0,0,0.10) 4px
             );
             pointer-events: none;
             z-index: 9999;
@@ -45,7 +45,7 @@
             content: '';
             position: fixed;
             inset: 0;
-            box-shadow: inset 0 0 120px rgba(0,0,0,0.7);
+            box-shadow: inset 0 0 80px rgba(0,0,0,0.45);
             pointer-events: none;
             z-index: 9998;
         }
@@ -58,13 +58,13 @@
             padding: 14px 20px;
             margin-bottom: 20px;
             text-align: center;
-            box-shadow: 0 0 14px var(--dim-green), inset 0 0 14px rgba(51,255,51,0.04);
+            box-shadow: 0 0 10px rgba(138,100,32,0.5), inset 0 0 10px rgba(212,168,67,0.03);
         }
 
         .header h1 {
-            font-size: 2.2em;
-            letter-spacing: 10px;
-            text-shadow: 0 0 12px var(--green);
+            font-size: 2.6em;
+            letter-spacing: 8px;
+            text-shadow: 0 0 8px rgba(212,168,67,0.5);
         }
 
         .header .subtitle {
@@ -152,8 +152,8 @@
         button:hover  { background: var(--green); color: var(--bg); }
         button:active { opacity: 0.75; }
 
-        button.danger              { border-color: #ff4444; color: #ff4444; }
-        button.danger:hover        { background: #ff4444;  color: var(--bg); }
+        button.danger              { border-color: #c0462a; color: #c0462a; }
+        button.danger:hover        { background: #c0462a;  color: var(--bg); }
 
         /* ── Todo list ── */
         .todo-list { list-style: none; }
@@ -181,7 +181,7 @@
         .todo-title.done { text-decoration: line-through; color: var(--dim-green); }
 
         .todo-due         { font-size: 0.75em; color: var(--dim-green); white-space: nowrap; }
-        .todo-due.overdue { color: #ff5555; }
+        .todo-due.overdue { color: #c0462a; }
 
         .empty-msg {
             color: var(--dim-green);
@@ -226,7 +226,7 @@
             transition: opacity 0.25s;
             z-index: 10000;
         }
-        .toast.err  { border-color: #ff4444; color: #ff4444; box-shadow: 0 0 12px rgba(255,68,68,0.45); }
+        .toast.err  { border-color: #c0462a; color: #c0462a; box-shadow: 0 0 12px rgba(192,70,42,0.45); }
         .toast.show { opacity: 1; }
     </style>
 </head>
